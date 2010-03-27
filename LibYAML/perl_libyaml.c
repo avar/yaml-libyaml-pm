@@ -639,7 +639,11 @@ dump_node(perl_yaml_dumper_t *dumper, SV *node)
             dump_ref(dumper, node);
         else if (ref_type == SVt_PVCV)
             dump_code(dumper, node);
+#if PERL_VERSION >= 11
+        else if (ref_type == SVt_PVMG || ref_type == SVt_REGEXP) {
+#else
         else if (ref_type == SVt_PVMG) {
+#endif
             MAGIC *mg;
             yaml_char_t *tag = NULL;
             if (SvMAGICAL(rnode)) {
